@@ -1,4 +1,4 @@
-# RandPine - git i
+# RandPine - A Random Forest Classifier for EMG Data
 
 Go to the Releases Page to download the latest version of the software.
 
