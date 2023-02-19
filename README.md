@@ -1,6 +1,8 @@
 # RandPine - A Random Forest Classifier for EMG Data
 
-Go to the Releases Page to download the latest version of the software.
+## Installation
+
+Go the the [Releases](https://github.com/Sharpz7/rand-pine/releases) Page and download the latest release.
 
 ## Libraries
 - [Ardiuno Threads](https://github.com/ivanseidel/ArduinoThread)
