@@ -2,7 +2,13 @@
 
 ## Installation
 
-Go the the [Releases](https://github.com/Sharpz7/rand-pine/releases) Page and download the latest release.
+- Go the the [Releases](https://github.com/Sharpz7/rand-pine/releases) Page and download the latest release.
+
+- Copy the libraries file to "My Documents/Arduino/libraries" (Note: You may need to create the libraries folder)
+
+- Copy the "rand-pine" folder to "My Documents/Arduino/libraries"
+
+- Open the Arduino IDE and open the "rand-pine" example.
 
 ## Libraries
 - [Ardiuno Threads](https://github.com/ivanseidel/ArduinoThread)
