@@ -2,3 +2,7 @@
 /jaguar-rust/target/
 
 .venv
+`
+# Python
+catboost_info/
+__py
