@@ -5,4 +5,4 @@
 `
 # Python
 catboost_info/
-__py
+# __pycache__/
