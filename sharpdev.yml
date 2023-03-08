@@ -1,9 +1,10 @@
 version: 1
 
-setup: |
-  echo 'Setup command goes here'
-
 scripts:
   rust: |
     cd ./jaguar-rust
     cargo run
+
+  python: |
+    cd ./model
+    python3 -m poetry run python -m jaguar

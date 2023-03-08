@@ -23,6 +23,11 @@ Digital Output Pins 2-4 are used.
 | GRIPPED | 0     | 1     | 0     |
 | NONE    | 0     | 0     | 0     |
 
+
+## Command Help
+
+Most important commands are kept in `./sharpdev.yml`
+
 ## TODO
 
 - [ ] Correctly implement threading
