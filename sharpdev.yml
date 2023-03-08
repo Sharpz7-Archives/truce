@@ -1,0 +1,9 @@
+version: 1
+
+setup: |
+  echo 'Setup command goes here'
+
+scripts:
+  rust: |
+    cd ./jaguar-rust
+    cargo run
