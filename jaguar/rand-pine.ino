@@ -94,14 +94,10 @@ void decisionAlgorithm() {
     if (gripCount > POLL_COUNT - (POLL_COUNT * ACCEPTABLE_ERROR))
     {
         analog0._lastAction = GRIP;
-        // Turn on LED
-        digitalWrite(LED_BUILTIN, HIGH);
     }
     if (relaxedCount > POLL_COUNT - (POLL_COUNT * ACCEPTABLE_ERROR))
     {
         analog0._lastAction = RELAXED;
-        // Turn on LED
-        digitalWrite(LED_BUILTIN, LOW);
     }
 }
 
@@ -129,8 +125,12 @@ void setOutput() {
         write(LOW, LOW, HIGH);
     } else if (state == GRIP) {
         write(LOW, HIGH, LOW);
+        // Turn on LED
+        digitalWrite(LED_BUILTIN, HIGH);
     } else {
         write(LOW, LOW, LOW);
+        // Turn off LED
+        digitalWrite(LED_BUILTIN, LOW);
     }
 
 }
