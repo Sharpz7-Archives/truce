@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "jaguar"
+name = "truce"
 version = "0.1.0"
-description = "A CatBoosted Classifier for EMG Data"
+description = "A Random Forrest Classifier for EMG Data"
 authors = ["Sharpz7 <adam.mcarthur62@gmail.com>"]
 
 [tool.poetry.dependencies]
@@ -9,9 +9,9 @@ python = "^3.9"
 pandas = "^1.5.3"
 seaborn = "^0.12.2"
 matplotlib = "^3.7.1"
-numpy = "^1.24.2"
+numpy = "^1.23"
 scikit-learn = "^1.2.1"
-catboost = "^1.1.1"
+micromlgen = "^1.1.28"
 
 [tool.poetry.dev-dependencies]
 

@@ -9,3 +9,8 @@ scripts:
   python: |
     cd ./model
     python3 -m poetry run python -m truce
+
+  c: |
+    cd ./truce-c
+    g++ -std=c99 -o ./internal/main ./src/main.c -lm
+    ./internal/main

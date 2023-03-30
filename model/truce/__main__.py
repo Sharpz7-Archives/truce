@@ -1,42 +1,50 @@
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestClassifier
+import warnings
 
+from micromlgen import port
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+from truce.hyperparams import hyper_tune
+from truce.plots import plot_oob_results, plot_classifier_results
 from truce.utils import read_data
-from truce.tree_count import calculate_best_tree_count
+
+# Remove Warnings Related to bad oob scores
+warnings.filterwarnings("ignore", category=UserWarning)
 
 df, X_train, X_test, y_train, y_test = read_data()
 
-print(df.shape)
+rf_oob_dfs = hyper_tune(X_train, y_train)
 
-print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+# Plot the results
+plot_oob_results(rf_oob_dfs)
 
-s = StandardScaler()
-X_train_s = s.fit_transform(X_train)
-X_test_s = s.transform(X_test)
+# Find the best max_features and best tree count
+# by looking at the minimum OOB error
+min_oob = min([rf_oob_df["oob"].min() for max_features, rf_oob_df in rf_oob_dfs])
+for max_features, rf_oob_df in rf_oob_dfs:
+    if rf_oob_df["oob"].min() == min_oob:
+        BEST_MAX_FEATURES = max_features
+        BEST_TREE_COUNT = rf_oob_df["oob"].idxmin()
+        break
 
-best_tree_count = calculate_best_tree_count(X_train_s, y_train)
-print(best_tree_count)
+print(f"Best max features: {BEST_MAX_FEATURES}")
+print(f"Best tree count: {BEST_TREE_COUNT}")
 
+# Random State is set to 42 for reproducibility
 optimised_classifier = RandomForestClassifier(
-    n_estimators=200, oob_score=True, random_state=42, n_jobs=-1
+    n_estimators=int(BEST_TREE_COUNT),
+    random_state=42,
+    n_jobs=-1,
+    max_features=BEST_MAX_FEATURES,
 )
 
-optimised_classifier.fit(X_train_s, y_train)
+optimised_classifier.fit(X_train, y_train)
 
-y_pred_rf = optimised_classifier.predict(X_test_s)
+y_pred_rf = optimised_classifier.predict(X_test)
 
 print(classification_report(y_test, y_pred_rf))
 
-f, ax = plt.subplots(figsize=(15, 15))
-confusion_mtx = confusion_matrix(y_test, y_pred_rf)
-sns.set(font_scale=1.4)
-sns.heatmap(
-    confusion_mtx, annot=True, linewidths=0.01, cmap="Greens", linecolor="gray", ax=ax
-)
-plt.xlabel("Predicted Label")
-plt.ylabel("True Label")
-plt.title("Confusion Matrix Validation set")
-plt.savefig("matrix.png", format="png")
+plot_classifier_results(y_test, y_pred_rf)
+
+# Send ported model to file
+with open("../truce-c/src/RandomForest.h", "w", encoding="utf-8") as f:
+    f.write(port(optimised_classifier))
