@@ -1,4 +1,4 @@
-# Truce - A Catboosted Classifier for EMG Data
+# Truce - A Random Forrest Classifier for EMG Data
 
 ## Installation
 
