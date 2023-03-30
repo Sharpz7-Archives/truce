@@ -2,9 +2,10 @@ version: 1
 
 scripts:
   rust: |
-    cd ./jaguar-rust
+    sudo chown -R $USER:$USER /cargo
+    cd ./truce-rust
     cargo run
 
   python: |
     cd ./model
-    python3 -m poetry run python -m jaguar
+    python3 -m poetry run python -m truce

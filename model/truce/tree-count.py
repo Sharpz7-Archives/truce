@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from catboost import CatBoostClassifier
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
 
 
 def read_data():
@@ -39,27 +39,26 @@ X_train, X_test, y_train, y_test = read_data()
 
 print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
 
-model = CatBoostClassifier(iterations=300, learning_rate=0.7, random_seed=42, depth=5)
-
 s = StandardScaler()
 X_train_s = s.fit_transform(X_train)
 X_test_s = s.transform(X_test)
 
-model.fit(
-    X_train_s, y_train, cat_features=None, eval_set=(X_test_s, y_test), verbose=False
-)
+RF = RandomForestClassifier(oob_score=True, random_state=42, warm_start=True, n_jobs=-1)
+oob_list = []
+for n_trees in [15, 20, 30, 40, 50, 100, 150, 200, 300, 400]:
+    RF.set_params(n_estimators=n_trees)
+    RF.fit(X_train_s, y_train)
+    oob_error = 1 - RF.oob_score_
+    oob_list.append(pd.Series({"n_trees": n_trees, "oob": oob_error}))
 
-prediction = model.predict(X_test_s)
+rf_oob_df = pd.concat(oob_list, axis=1).T.set_index("n_trees")
 
-print(classification_report(y_test, prediction))
+sns.set_context("talk")
+sns.set_style("white")
 
-f, ax = plt.subplots(figsize=(15, 15))
-confusion_mtx = confusion_matrix(y_test, prediction)
-sns.set(font_scale=1.4)
-sns.heatmap(
-    confusion_mtx, annot=True, linewidths=0.01, cmap="Greens", linecolor="gray", ax=ax
-)
-plt.xlabel("Predicted Label")
-plt.ylabel("True Label")
-plt.title("Confusion Matrix Validation set")
-plt.savefig("matrix.png", format="png")
+ax = rf_oob_df.plot(legend=False, marker="o", figsize=(14, 7), linewidth=5)
+ax.set(ylabel="out-of-bag error")
+
+# Save ax to file
+fig = ax.get_figure()
+fig.savefig("bag-error.png", format="png")

@@ -1,0 +1,8 @@
+[package]
+name = "jaguar-rust"
+version = "0.1.0"
+edition = "2021"
+authors = ["Adam McArthur <adam.mcarthur62@gmail.com>"]
+
+[dependencies]
+catboost = { git = "https://github.com/catboost/catboost" }
